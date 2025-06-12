@@ -1,43 +1,45 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/16/solid';
 import { Eye, EyeOff } from "lucide-react"
+import { useRegisterUser } from "../../hooks/useRegisterUser";
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 
 export default function RegisterForm() {
+  const { mutate, data, error, isPending, isSuccess, isError } = useRegisterUser()
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    // Basic validation example:
-    if (!username || !email || !password || !confirmPassword) {
-      alert("Please fill all fields.");
-      return;
+  const validationSchema = Yup.object(
+    {
+      username: Yup.string().min(4, "Must be of at lease 4 characters").required("Username required"),
+      email: Yup.string().email("invalid email").required("Email required"),
+      password: Yup.string().min(8, "Min 8 character required").required("Password required"),
+      confirmPassword: Yup.string().min(8, "Must match with password").required("Password unmatched"),
     }
-    if (password !== confirmPassword) {
-      alert("Passwords do not match.");
-      return;
+  )
+
+  const formik = useFormik(
+    {
+      initialValues: {
+        // states of input
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      },
+      validationSchema: validationSchema,
+      onSubmit: (data) => {
+        // data is an obect of state of values, email, password
+        mutate(data,)
+      }
     }
-
-    // Reset form or redirect after registration
-    // const handleGoogleSignUp = () => {
-    //   console.log("Google sign up clicked")
-    // }
-
-    // const handleFacebookSignUp = () => {
-    //   console.log("Facebook sign up clicked")
-    // }
-  };
+  )
 
   return (
-    // <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl shadow-2xl overflow-hidden max-w-4xl w-full grid lg:grid-cols-2">
+
+    <div className="min-h-screen min-h-screen flex items-center justify-center p-4">
+      <div className="bg-white rounded-3xl shadow-2xl overflow-hidden max-w-6xl w-full grid lg:grid-cols-2">
         {/* Left side - Hero Illustration */}
         <div className="hidden lg:flex items-center justify-center bg-gray-50 p-6">
           <div className="text-center">
@@ -126,7 +128,7 @@ export default function RegisterForm() {
               <p className="text-red-100 text-lg">Create an account</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={formik.handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="username" className="block text-white font-semibold text-lg mb-2">
                   Username:
@@ -134,8 +136,9 @@ export default function RegisterForm() {
                 <input
                   id="username"
                   type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  value={formik.values.username}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className="w-full bg-red-200/50 border-0 text-gray-800 placeholder:text-gray-600 h-12 rounded-lg px-4 focus:outline-none focus:ring-2 focus:ring-white/50"
                   placeholder="Enter your username"
                   required
@@ -149,8 +152,9 @@ export default function RegisterForm() {
                 <input
                   id="email"
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className="w-full bg-red-200/50 border-0 text-gray-800 placeholder:text-gray-600 h-12 rounded-lg px-4 focus:outline-none focus:ring-2 focus:ring-white/50"
                   placeholder="Enter your email"
                   required
@@ -165,8 +169,9 @@ export default function RegisterForm() {
                   <input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     className="w-full bg-red-200/50 border-0 text-gray-800 placeholder:text-gray-600 h-12 rounded-lg px-4 pr-12 focus:outline-none focus:ring-2 focus:ring-white/50"
                     placeholder="Enter your password"
                     required
@@ -189,8 +194,9 @@ export default function RegisterForm() {
                   <input
                     id="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    value={formik.values.confirmPassword}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     className="w-full bg-red-200/50 border-0 text-gray-800 placeholder:text-gray-600 h-12 rounded-lg px-4 pr-12 focus:outline-none focus:ring-2 focus:ring-white/50"
                     placeholder="Confirm your password"
                     required
@@ -211,6 +217,10 @@ export default function RegisterForm() {
               >
                 SIGN UP
               </button>
+              <div>
+                {error && <p style={{ color: "red" }}>{error.message}</p>}
+                {data && <p style={{ color: "green" }}>{data.message}!</p>}
+              </div>
             </form>
 
             <div className="mt-6 text-center">
@@ -267,6 +277,6 @@ export default function RegisterForm() {
           </div>
         </div>
       </div>
-    // </div>
+    </div>
   );
 }

@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { Calendar, BarChart3, CreditCard, MoreHorizontal, Plus, Smartphone, UtensilsCrossed, Menu } from "lucide-react"
 
