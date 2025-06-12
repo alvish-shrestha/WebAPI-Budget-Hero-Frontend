@@ -5,10 +5,7 @@ import LoginForm from '../components/auth/LoginForm'
 export default function Login() {
   return (
     <div>
-      <div>Login Page</div>
-      <div>
         <LoginForm />
-      </div>
     </div>
   )
 }
