@@ -5,11 +5,14 @@ import { useLoginUser } from "../../hooks/useLoginUser";
 import { Eye, EyeOff } from "lucide-react"
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const { mutate, isPending } = useLoginUser();
+
+  const navigate = useNavigate();
 
   const validationSchema = Yup.object(
     {
@@ -28,7 +31,14 @@ export default function LoginForm() {
       validationSchema: validationSchema,
       onSubmit: (data) => {
         // data is an obect of state of values, email, password
-        mutate(data,)
+        mutate(data, {
+          onSuccess: () => {
+            navigate("/dashboard");
+          },
+          onError: (error) => {
+            console.error("Login failed", error);
+          }
+        })
       }
     }
   )
@@ -70,6 +80,9 @@ export default function LoginForm() {
                   placeholder="Enter your email"
                   required
                 />
+                {formik.touched.email && formik.errors.email && (
+                  <p className="text-red-200 text-sm mt-1">{formik.errors.email}</p>
+                )}
               </div>
 
               <div>
@@ -104,7 +117,8 @@ export default function LoginForm() {
 
               <button
                 type="submit"
-                className="w-full bg-gray-800 hover:bg-gray-900 text-white font-bold py-4 text-lg rounded-lg transition-colors"
+                className={`w-full bg-gray-800 hover:bg-gray-900 text-white font-bold py-4 text-lg rounded-lg transition-colors ${isPending ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
               >
                 SIGN IN
               </button>
