@@ -1,11 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import RegisterForm from '../components/auth/RegisterForm';
+import DashboardForm from '../components/auth/DashboardForm';
 
 export default function Register() {
     return (
         <div>
-            <RegisterForm />
+            <DashboardForm />
         </div>
     );
 }
