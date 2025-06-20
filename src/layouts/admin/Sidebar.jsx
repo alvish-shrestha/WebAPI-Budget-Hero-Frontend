@@ -11,7 +11,7 @@ export default function Sidebar() {
             <h2 className="text-2xl font-bold mb-6">Budget Hero</h2>
             <nav className="flex flex-col gap-2">
                 <NavLink to="/admin" className={linkClass}>
-                    User Management
+                    User
                 </NavLink>
                 <NavLink to="/admin/feedback" className={linkClass}>
                     Feedback

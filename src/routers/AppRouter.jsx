@@ -22,6 +22,7 @@ const AppRouter = () => (
         <Route index element={<UserManagement/>}/>
         <Route path='system-activity' element={<SystemActivityManagement/>}/>
         <Route path='feedback' element={<FeedbackManagement/>}/>
+        <Route path='*' element={<></>}/>
       </Route>
       
     </Routes>
