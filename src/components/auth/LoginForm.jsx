@@ -32,12 +32,15 @@ export default function LoginForm() {
       onSubmit: (data) => {
         // data is an obect of state of values, email, password
         mutate(data, {
-          onSuccess: () => {
-            navigate("/dashboard");
+          onSuccess: (response) => {
+            const role = response?.data?.role;
+
+            if (role === "admin") {
+              navigate("/admin/user-management");
+            } else {
+              navigate("/dashboard");
+            }
           },
-          onError: (error) => {
-            console.error("Login failed", error);
-          }
         })
       }
     }
