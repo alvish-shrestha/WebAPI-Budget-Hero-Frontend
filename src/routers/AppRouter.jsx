@@ -4,6 +4,10 @@ import Login from '../pages/Login';
 import SignUp from '../pages/Register';
 import Dashboard from '../pages/Dashboard';
 import ForgotPassword from '../pages/ForgotPassword';
+import AdminMainLayout from '../layouts/admin/AdminMainLayout';
+import UserManagement from '../pages/admin/UserManagement';
+import SystemActivityManagement from '../pages/admin/SystemActivityManagement';
+import FeedbackManagement from '../pages/admin/FeedbackManagement';
 
 const AppRouter = () => (
   <Router>
@@ -13,6 +17,13 @@ const AppRouter = () => (
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+
+      <Route path='/admin/*' element={<AdminMainLayout/>}>
+        <Route index element={<UserManagement/>}/>
+        <Route path='system-activity' element={<SystemActivityManagement/>}/>
+        <Route path='feedback' element={<FeedbackManagement/>}/>
+      </Route>
+      
     </Routes>
   </Router>
 );
