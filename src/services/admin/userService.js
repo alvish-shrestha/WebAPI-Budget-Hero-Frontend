@@ -1,5 +1,5 @@
 import { data } from "react-router-dom";
-import { deleteOneUserApi, getAllUserApi, getOneUserApi, updateOneUserApi } from "../../api/admin/userApi";
+import { createOneUserApi, deleteOneUserApi, getAllUserApi, getOneUserApi, updateOneUserApi } from "../../api/admin/userApi";
 
 export const getAllUserService = async (params) => {
     try {
@@ -13,21 +13,21 @@ export const getAllUserService = async (params) => {
 
 export const getOneUserService = async (id) => {
     try {
-        const response = await getOneUserApi(id, data)
+        const response = await getOneUserApi(id)
         return response.data
     } catch (err) {
         throw err.response?.data || { message: "Failed to fetch" }   
     }
 }
 
-// export const createOneUserService = async (params) => {
-//     try {
-//         const response = await createOneUserApi(data)
-//         return response.data
-//     } catch (err) {
-//         throw err.response?.data || { message: "Failed to create" }
-//     }
-// }
+export const createOneUserService = async (data) => {
+    try {
+        const response = await createOneUserApi(data)
+        return response.data
+    } catch (err) {
+        throw err.response?.data || { message: "Failed to create" }
+    }
+}
 
 export const updateOneUserService = async (id, data) => {
     try {

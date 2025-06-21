@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 // useQuery -> Get request states
 import { useState } from "react";
-import { deleteOneUserService, getAllUserService, getOneUserService, updateOneUserService } from "../../services/admin/userService";
+import { createOneUserService, deleteOneUserService, getAllUserService, getOneUserService, updateOneUserService } from "../../services/admin/userService";
 import { toast } from "react-toastify";
 
 export const useAdminUser = () => {
@@ -24,20 +24,20 @@ export const useAdminUser = () => {
     }
 }
 
-// export const useCreateUser = () => {
-//     const queryClient = useQueryClient()
-//     return useMutation(
-//         {
-//             mutationKey: ["admin_create_user"],
-//             mutationFn: createOneUserService,
-//             onSuccess: () => {
-//                 queryClient.invalidateQueries(
-//                     "admin_user"
-//                 )
-//             }
-//         }
-//     )
-// }
+export const useCreateUser = () => {
+    const queryClient = useQueryClient()
+    return useMutation(
+        {
+            mutationKey: ["admin_create_user"],
+            mutationFn: createOneUserService,
+            onSuccess: () => {
+                queryClient.invalidateQueries(
+                    "admin_users"
+                )
+            }
+        }
+    )
+}
 
 export const useGetOneUser = (id) => {
     const query = useQuery(

@@ -8,6 +8,7 @@ import AdminMainLayout from '../layouts/admin/AdminMainLayout';
 import UserManagement from '../pages/admin/UserManagement';
 import SystemActivityManagement from '../pages/admin/SystemActivityManagement';
 import FeedbackManagement from '../pages/admin/FeedbackManagement';
+import DashboardManagement from '../pages/admin/DashboardManagement';
 
 const AppRouter = () => (
   <Router>
@@ -19,12 +20,12 @@ const AppRouter = () => (
       <Route path="/forgot-password" element={<ForgotPassword />} />
 
       <Route path='/admin/*' element={<AdminMainLayout/>}>
-        <Route index element={<UserManagement/>}/>
-        <Route path='system-activity' element={<SystemActivityManagement/>}/>
-        <Route path='feedback' element={<FeedbackManagement/>}/>
+        <Route index element={<DashboardManagement />}/>
+        <Route path='users' element={<UserManagement />}/>
+        <Route path='system-activity' element={<SystemActivityManagement />}/>
+        <Route path='feedback' element={<FeedbackManagement />}/>
         <Route path='*' element={<></>}/>
       </Route>
-      
     </Routes>
   </Router>
 );
