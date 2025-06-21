@@ -10,7 +10,7 @@ export const useLoginUser = () => {
         {
             mutationFn: loginUserService,
             mutationKey: ["login-key"],
-            onSuccess: (data) => { // (data) is body
+            onSuccess: (data) => {
                 login(data?.data, data?.token)
                 toast.success(data?.message || "Login Success")
             },

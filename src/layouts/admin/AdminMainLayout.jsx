@@ -20,7 +20,6 @@ export default function AdminMainLayout() {
     navigate("/login");
   };
 
-  // When closing modal, trigger fade-out animation, then unmount
   const closeModal = () => {
     setAnimateOut(true);
   };
@@ -30,7 +29,7 @@ export default function AdminMainLayout() {
       const timer = setTimeout(() => {
         setAnimateOut(false);
         setShowModal(false);
-      }, 300); // match animation duration (300ms)
+      }, 300);
       return () => clearTimeout(timer);
     }
   }, [animateOut]);

@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-// useQuery -> Get request states
 import { useState } from "react";
 import { createOneUserService, deleteOneUserService, getAllUserService, getOneUserService, updateOneUserService } from "../../services/admin/userService";
 import { toast } from "react-toastify";
@@ -7,7 +6,7 @@ import { toast } from "react-toastify";
 export const useAdminUser = () => {
     const query = useQuery(
         {
-            queryKey: ["admin_users"], // keys and variable to re-apply query
+            queryKey: ["admin_users"],
             queryFn: () => {
                 return getAllUserService(
                     {
@@ -16,7 +15,7 @@ export const useAdminUser = () => {
                     }
                 )
             },
-            keepPreviousData: true // cache data
+            keepPreviousData: true
         }
     )
     return {
@@ -44,8 +43,8 @@ export const useGetOneUser = (id) => {
         {
             queryKey: ["admin_users_detail", id],
             queryFn: () => getOneUserService(id),
-            enabled: !!id, // id is not null or undefined
-            retry: false // tries 3 times default
+            enabled: !!id, 
+            retry: false 
         }
     )
     const user = query.data?.data || {}

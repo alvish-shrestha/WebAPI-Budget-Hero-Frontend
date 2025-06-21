@@ -27,9 +27,10 @@ export default function UserTable() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteUserId, setDeleteUserId] = useState(null);
 
-  // NEW: Manage showing/hiding the popup with animation
   const [showPopup, setShowPopup] = useState(false);
   const [animatePopup, setAnimatePopup] = useState(false);
+
+  const [animateDeleteModal, setAnimateDeleteModal] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -74,6 +75,7 @@ export default function UserTable() {
     } else {
       createUser.mutate(formData, {
         onSuccess: () => {
+          toast.success("User successfully added");
           resetForm();
           closePopup();
         },
@@ -102,33 +104,38 @@ export default function UserTable() {
   const openDeleteModal = (id) => {
     setDeleteUserId(id);
     setShowDeleteModal(true);
+    setTimeout(() => setAnimateDeleteModal(true), 10);
   };
 
   const confirmDelete = () => {
     deleteUser.mutate(deleteUserId, {
       onSuccess: () => {
-        toast.success("User deleted");
-        setShowDeleteModal(false);
-        setDeleteUserId(null);
+        // toast.success("User deleted");
+        closeDeleteModal();
       },
       onError: () => {
-        toast.error("Error deleting user");
+        // toast.error("Error deleting user");
       },
     });
   };
 
   const cancelDelete = () => {
-    setShowDeleteModal(false);
-    setDeleteUserId(null);
+    closeDeleteModal();
   };
 
-  // NEW: Open popup and trigger animation
+  const closeDeleteModal = () => {
+    setAnimateDeleteModal(false);
+    setTimeout(() => {
+      setShowDeleteModal(false);
+      setDeleteUserId(null);
+    }, 300);
+  };
+
   const openPopup = () => {
     setShowPopup(true);
     setTimeout(() => setAnimatePopup(true), 10);
   };
 
-  // NEW: Close popup with fadeOut animation
   const closePopup = () => {
     setAnimatePopup(false);
     setTimeout(() => {
@@ -136,10 +143,9 @@ export default function UserTable() {
       resetForm();
       setEditMode(false);
       setSelectedId(null);
-    }, 300); // match animation duration
+    }, 300); 
   };
 
-  // NEW: handle Create User button click to open popup for creation
   const handleCreateClick = () => {
     resetForm();
     setEditMode(false);
@@ -339,11 +345,17 @@ export default function UserTable() {
 
       {/* Delete confirmation modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-md w-full max-w-sm">
-            <h3 className="text-lg font-semibold mb-4">
-              Confirm Delete User?
-            </h3>
+        <div
+          className={`fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 ${
+            animateDeleteModal ? "animate-fadeIn" : "animate-fadeOut"
+          }`}
+        >
+          <div
+            className={`bg-white p-6 rounded shadow-md w-full max-w-sm ${
+              animateDeleteModal ? "animate-slideFadeIn" : ""
+            }`}
+          >
+            <h3 className="text-lg font-semibold mb-4">Confirm Delete User?</h3>
             <div className="flex justify-end gap-4">
               <button
                 onClick={cancelDelete}
