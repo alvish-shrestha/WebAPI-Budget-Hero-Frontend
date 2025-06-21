@@ -36,7 +36,7 @@ export default function LoginForm() {
             const role = response?.data?.role;
 
             if (role === "admin") {
-              navigate("/admin/user-management");
+              navigate("/admin");
             } else {
               navigate("/dashboard");
             }
