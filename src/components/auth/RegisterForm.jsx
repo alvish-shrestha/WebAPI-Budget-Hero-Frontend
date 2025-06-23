@@ -218,8 +218,8 @@ export default function RegisterForm() {
                 SIGN UP
               </button>
               <div>
-                {error && <p style={{ color: "red" }}>{error.message}</p>}
-                {data && <p style={{ color: "green" }}>{data.message}!</p>}
+                {/* {error && <p style={{ color: "red" }}>{error.message}</p>} */}
+                {/* {data && <p style={{ color: "green" }}>{data.message}!</p>} */}
               </div>
             </form>
 

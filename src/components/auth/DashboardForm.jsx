@@ -34,6 +34,11 @@ export default function DashboardForm() {
     { icon: MoreHorizontal, label: "More", active: false },
   ]
 
+  const confirmLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/login");
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex">
       {/* Sidebar */}
@@ -57,11 +62,10 @@ export default function DashboardForm() {
             <button
               key={index}
               onClick={() => setActiveTab(item.label)}
-              className={`w-full flex items-center space-x-3 p-4 rounded-2xl transition-all duration-200 ${
-                item.label === activeTab
+              className={`w-full flex items-center space-x-3 p-4 rounded-2xl transition-all duration-200 ${item.label === activeTab
                   ? "bg-white text-gray-800 shadow-lg"
                   : "bg-white/10 text-white hover:bg-white/20 border border-white/20"
-              }`}
+                }`}
             >
               <item.icon className="w-6 h-6" />
               <span className="font-semibold">{item.label}</span>
@@ -75,8 +79,11 @@ export default function DashboardForm() {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-          <button className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full font-semibold transition-colors duration-200 flex items-center space-x-2">
-            <span>BUDGET HERO</span>
+          <button
+            onClick={confirmLogout}
+            className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full font-semibold transition-colors duration-200 flex items-center space-x-2"
+          >
+            <span>Logout</span>
           </button>
         </div>
 

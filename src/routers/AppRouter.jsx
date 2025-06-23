@@ -9,11 +9,15 @@ import UserManagement from '../pages/admin/UserManagement';
 import SystemActivityManagement from '../pages/admin/SystemActivityManagement';
 import FeedbackManagement from '../pages/admin/FeedbackManagement';
 import DashboardManagement from '../pages/admin/DashboardManagement';
+import Homepage from '../pages/Homepage';
+import LearnMore from '../pages/LearnMore';
 
 const AppRouter = () => (
   <Router>
     <Routes>
-      <Route path="/" element={<Navigate to="/login" />} />
+      {/* <Route path="/" element={<Navigate to="/login" />} /> */}
+      <Route path="/" element={<Homepage />} />
+      <Route path="/learn-more" element={<LearnMore />} />
       <Route path="/login" element={<Login />} />
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/dashboard" element={<Dashboard />} />

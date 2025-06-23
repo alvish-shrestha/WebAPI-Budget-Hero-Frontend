@@ -6,6 +6,12 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        brand: '#F55345',
+        'brand-light': '#ffeae8',
+        'brand-soft': '#fff8f7',
+        'brand-dark': '#e14437',
+      },
       keyframes: {
         fadeIn: {
           '0%': { opacity: '0' },
