@@ -16,8 +16,6 @@ export default function UserTable() {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
-    firstName: "",
-    lastName: "",
     password: "",
     role: "user",
   });
@@ -41,8 +39,6 @@ export default function UserTable() {
     setFormData({
       username: "",
       email: "",
-      firstName: "",
-      lastName: "",
       password: "",
       role: "user",
     });
@@ -91,8 +87,6 @@ export default function UserTable() {
     setFormData({
       username: user.username,
       email: user.email,
-      firstName: user.firstName || "",
-      lastName: user.lastName || "",
       password: "",
       role: user.role || "user",
     });
@@ -211,32 +205,6 @@ export default function UserTable() {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 border rounded-md shadow-sm focus:ring focus:ring-green-200 focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  First Name
-                </label>
-                <input
-                  type="text"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border rounded-md shadow-sm focus:ring focus:ring-green-200 focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Last Name
-                </label>
-                <input
-                  type="text"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
                   className="w-full px-3 py-2 border rounded-md shadow-sm focus:ring focus:ring-green-200 focus:outline-none"
                 />
               </div>

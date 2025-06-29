@@ -25,6 +25,7 @@ export const createOneUserService = async (data) => {
         const response = await createOneUserApi(data)
         return response.data
     } catch (err) {
+        console.log(err);
         throw err.response?.data || { message: "Failed to create" }
     }
 }

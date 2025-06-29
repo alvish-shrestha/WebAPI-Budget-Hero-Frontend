@@ -9,8 +9,10 @@ export const useRegisterUser = () => {
             mutationKey: ["register-key"],
             onSuccess: (data) => {
                 toast.success(data?.message || "Registration Success")
+                // formik.resetForm();
             },
             onError: (err) => {
+                console.log(err);
                 toast.error(err?.message || "Registration Failed")
             }
         }

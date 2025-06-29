@@ -15,7 +15,9 @@ export default function RegisterForm() {
       username: Yup.string().min(4, "Must be of at lease 4 characters").required("Username required"),
       email: Yup.string().email("invalid email").required("Email required"),
       password: Yup.string().min(8, "Min 8 character required").required("Password required"),
-      confirmPassword: Yup.string().min(8, "Must match with password").required("Password unmatched"),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password'), null], 'Passwords must match')
+        .required("Confirm password required"),
     }
   )
 
@@ -31,7 +33,8 @@ export default function RegisterForm() {
       validationSchema: validationSchema,
       onSubmit: (data) => {
         // data is an obect of state of values, email, password
-        mutate(data,)
+        console.log("Registering with:", data);
+        mutate(data)
       }
     }
   )
