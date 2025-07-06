@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import icon from "../assets/images/icon.png"
 
 const Header = () => {
   return (
@@ -8,7 +9,7 @@ const Header = () => {
         
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2 text-[#F55345] font-extrabold text-xl tracking-tight">
-          <span className="text-2xl">🪙</span>
+          <img src={icon} alt="Budget Hero Icon" className="h-6 w-6" />
           <span>Budget Hero</span>
         </Link>
 
