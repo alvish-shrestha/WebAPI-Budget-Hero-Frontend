@@ -1,12 +1,13 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useAddTransaction, useUpdateTransaction } from "../../hooks/useTransactionUser";
+import { useAddTransaction, useUpdateTransaction, useDeleteTransaction } from "../../hooks/useTransactionUser";
 import { toast } from "react-toastify";
 
 export default function TransactionForm({ onClose, onSuccess, initialData }) {
     const { mutate: addTransaction, isPending: isAdding } = useAddTransaction();
     const { mutate: updateTransaction, isPending: isUpdating } = useUpdateTransaction();
+    const { mutate: deleteTransaction, isPending: isDeleting } = useDeleteTransaction();
 
     const isEditMode = Boolean(initialData?._id);
 
@@ -53,9 +54,7 @@ export default function TransactionForm({ onClose, onSuccess, initialData }) {
             amount: initialData?.amount || "",
             category: initialData?.category || "",
             account: initialData?.account || "",
-            date:
-                initialData?.date?.split("T")[0] ||
-                new Date().toISOString().split("T")[0],
+            date: initialData?.date?.split("T")[0] || new Date().toISOString().split("T")[0],
             note: initialData?.note || "",
             description: initialData?.description || "",
         },
@@ -71,9 +70,7 @@ export default function TransactionForm({ onClose, onSuccess, initialData }) {
                             onClose?.();
                             onSuccess?.();
                         },
-                        onError: () => {
-                            toast.error("Failed to update transaction");
-                        },
+                        onError: () => toast.error("Failed to update transaction"),
                     }
                 );
             } else {
@@ -83,13 +80,53 @@ export default function TransactionForm({ onClose, onSuccess, initialData }) {
                         onClose?.();
                         onSuccess?.();
                     },
-                    onError: () => {
-                        toast.error("Failed to add transaction");
-                    },
+                    onError: () => toast.error("Failed to add transaction"),
                 });
             }
         },
     });
+
+    const handleDelete = () => {
+        toast.info(
+            ({ closeToast }) => (
+                <div className="space-y-2">
+                    <p>Are you sure you want to delete this transaction?</p>
+                    <div className="flex justify-end gap-4">
+                        <button
+                            onClick={() => {
+                                deleteTransaction(initialData._id, {
+                                    onSuccess: () => {
+                                        closeToast();
+                                        onClose?.();
+                                        onSuccess?.();
+                                    },
+                                    onError: () => {
+                                        closeToast();
+                                    },
+                                });
+                            }}
+                            className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm"
+                        >
+                            Yes
+                        </button>
+                        <button
+                            onClick={closeToast}
+                            className="px-3 py-1 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 text-sm"
+                        >
+                            No
+                        </button>
+                    </div>
+                </div>
+            ),
+            {
+                autoClose: false,
+                closeOnClick: false,
+                closeButton: false,
+                draggable: false,
+            }
+        );
+    };
+
 
     const categoryOptions =
         formik.values.type === "income" ? incomeCategories : expenseCategories;
@@ -140,9 +177,9 @@ export default function TransactionForm({ onClose, onSuccess, initialData }) {
             <div className="flex flex-col">
                 <label className="text-sm font-medium mb-1">Amount</label>
                 <div className="relative">
-          <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">
-            Rs.
-          </span>
+                    <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">
+                        Rs.
+                    </span>
                     <input
                         type="number"
                         placeholder="e.g. 1200"
@@ -228,20 +265,35 @@ export default function TransactionForm({ onClose, onSuccess, initialData }) {
                 />
             </div>
 
-            {/* Submit Button */}
-            <button
-                type="submit"
-                className="w-full bg-[#F55345] text-white font-semibold py-3 rounded-md hover:bg-red-600 transition-all"
-                disabled={isAdding || isUpdating}
-            >
-                {isAdding || isUpdating
-                    ? isEditMode
-                        ? "Updating..."
-                        : "Adding..."
-                    : isEditMode
-                        ? "Update Transaction"
-                        : "Add Transaction"}
-            </button>
+            {/* Buttons */}
+            {isEditMode ? (
+                <div className="flex justify-between items-center gap-4">
+                    <button
+                        type="submit"
+                        className="flex-1 bg-[#F55345] text-white font-semibold py-3 rounded-md hover:bg-red-600 transition-all"
+                        disabled={isUpdating}
+                    >
+                        {isUpdating ? "Updating..." : "Update Transaction"}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={handleDelete}
+                        className="w-12 h-12 flex items-center justify-center border border-red-600 text-red-600 hover:bg-red-600 hover:text-white font-bold text-lg rounded-full transition-all"
+                        disabled={isDeleting}
+                        title="Delete Transaction"
+                    >
+                        🗑
+                    </button>
+                </div>
+            ) : (
+                <button
+                    type="submit"
+                    className="w-full bg-[#F55345] text-white font-semibold py-3 rounded-md hover:bg-red-600 transition-all"
+                    disabled={isAdding}
+                >
+                    {isAdding ? "Adding..." : "Add Transaction"}
+                </button>
+            )}
         </form>
     );
 }

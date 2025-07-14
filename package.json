@@ -17,10 +17,13 @@
     "formik": "^2.4.6",
     "framer-motion": "^12.23.5",
     "lucide-react": "^0.514.0",
+    "prop-types": "^15.8.1",
     "react": "^19.1.0",
+    "react-confirm-alert": "^3.0.6",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.0",
     "react-swipeable": "^7.0.2",
+    "react-swipeable-list": "^1.10.0",
     "react-toastify": "^11.0.5",
     "yup": "^1.6.1"
   },

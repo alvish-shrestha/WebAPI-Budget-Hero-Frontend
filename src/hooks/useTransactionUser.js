@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 // import { useContext } from "react";
 
 // Fetch all transactions
-export const getTransactionUser = () => {
+export const useGetTransaction = () => {
     return useQuery({
         queryKey: ["dashboard-user"],
         queryFn: getTransactionUserService,
@@ -60,7 +60,7 @@ export const useDeleteTransaction = () => {
     return useMutation({
         mutationFn: (id) => deleteTransactionUserService(id),
         onSuccess: async () => {
-            toast.success("🗑️ Transaction deleted!");
+            toast.success("Transaction deleted!");
             await queryClient.invalidateQueries({ queryKey: ["dashboard-user"] });
         },
         onError: (err) => {
