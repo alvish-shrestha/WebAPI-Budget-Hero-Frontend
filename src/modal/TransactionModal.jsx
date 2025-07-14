@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import TransactionForm from "../components/auth/TransactionForm.jsx";
 
 export default function TransactionModal({ isOpen, onClose, onSuccess, initialData }) {

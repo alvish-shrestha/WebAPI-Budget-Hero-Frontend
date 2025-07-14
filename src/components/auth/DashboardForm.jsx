@@ -8,9 +8,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { format, parseISO, isToday } from "date-fns";
-import { useSwipeable } from "react-swipeable";
-import { motion, AnimatePresence } from "framer-motion";
-import { useGetTransaction, useDeleteTransaction } from "../../hooks/useTransactionUser.js";
+import { useGetTransaction } from "../../hooks/useTransactionUser.js";
 import TransactionModal from "../../modal/TransactionModal.jsx";
 
 export default function DashboardForm() {
@@ -22,8 +20,6 @@ export default function DashboardForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data, isSuccess } = useGetTransaction();
   const [editTransaction, setEditTransaction] = useState(null)
-  const { mutate: deleteTransaction } = useDeleteTransaction();
-  const [deletingId, setDeletingId] = useState(null);
 
   // Icon map based on TransactionForm
   const iconMap = {
@@ -80,16 +76,6 @@ export default function DashboardForm() {
       acc[date].push(txn);
       return acc;
     }, {});
-  };
-
-  const handleDelete = (id) => {
-    setDeletingId(id); // trigger animation
-    setTimeout(() => {
-      if (confirm("Are you sure you want to delete this transaction?")) {
-        deleteTransaction(id);
-      }
-      setDeletingId(null);
-    }, 300); // wait for animation
   };
 
   const refreshDashboard = () => {
