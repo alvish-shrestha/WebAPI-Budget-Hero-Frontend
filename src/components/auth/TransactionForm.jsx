@@ -1,10 +1,14 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useAddTransaction } from "../../hooks/useTransactionUser";
+import { useAddTransaction, useUpdateTransaction } from "../../hooks/useTransactionUser";
+import { toast } from "react-toastify";
 
-export default function TransactionForm({ onClose, onSuccess }) {
-    const { mutate, isPending } = useAddTransaction();
+export default function TransactionForm({ onClose, onSuccess, initialData }) {
+    const { mutate: addTransaction, isPending: isAdding } = useAddTransaction();
+    const { mutate: updateTransaction, isPending: isUpdating } = useUpdateTransaction();
+
+    const isEditMode = Boolean(initialData?._id);
 
     const incomeCategories = [
         { label: "💼 Salary", value: "Salary" },
@@ -15,7 +19,7 @@ export default function TransactionForm({ onClose, onSuccess }) {
     ];
 
     const expenseCategories = [
-        { label: "🍔 Food", value: "Food" },
+        { label: "🍽️ Food", value: "Food" },
         { label: "🚗 Transport", value: "Transport" },
         { label: "🛍️ Shopping", value: "Shopping" },
         { label: "💡 Utilities", value: "Utilities" },
@@ -45,23 +49,45 @@ export default function TransactionForm({ onClose, onSuccess }) {
 
     const formik = useFormik({
         initialValues: {
-            type: "expense",
-            amount: "",
-            category: "",
-            account: "",
-            date: new Date().toISOString().split("T")[0],
-            note: "",
-            description: "",
+            type: initialData?.type || "expense",
+            amount: initialData?.amount || "",
+            category: initialData?.category || "",
+            account: initialData?.account || "",
+            date:
+                initialData?.date?.split("T")[0] ||
+                new Date().toISOString().split("T")[0],
+            note: initialData?.note || "",
+            description: initialData?.description || "",
         },
+        enableReinitialize: true,
         validationSchema,
         onSubmit: async (values, { resetForm }) => {
-            mutate(values, {
-                onSuccess: () => {
-                    resetForm();
-                    onSuccess?.();
-                    onClose?.();
-                },
-            });
+            if (isEditMode) {
+                updateTransaction(
+                    { id: initialData._id, data: values },
+                    {
+                        onSuccess: () => {
+                            resetForm();
+                            onClose?.();
+                            onSuccess?.();
+                        },
+                        onError: () => {
+                            toast.error("Failed to update transaction");
+                        },
+                    }
+                );
+            } else {
+                addTransaction(values, {
+                    onSuccess: () => {
+                        resetForm();
+                        onClose?.();
+                        onSuccess?.();
+                    },
+                    onError: () => {
+                        toast.error("Failed to add transaction");
+                    },
+                });
+            }
         },
     });
 
@@ -74,7 +100,7 @@ export default function TransactionForm({ onClose, onSuccess }) {
             className="max-w-xl w-full mx-auto bg-white p-8 rounded-2xl shadow-xl space-y-6 text-gray-800 font-sans transition-all"
         >
             <h2 className="text-3xl font-bold text-center text-[#F55345] mb-4">
-                Add Transaction
+                {isEditMode ? "Edit Transaction" : "Add Transaction"}
             </h2>
 
             {/* Transaction Type */}
@@ -202,13 +228,19 @@ export default function TransactionForm({ onClose, onSuccess }) {
                 />
             </div>
 
-            {/* Submit */}
+            {/* Submit Button */}
             <button
                 type="submit"
                 className="w-full bg-[#F55345] text-white font-semibold py-3 rounded-md hover:bg-red-600 transition-all"
-                disabled={isPending}
+                disabled={isAdding || isUpdating}
             >
-                {isPending ? "Adding..." : "Add Transaction"}
+                {isAdding || isUpdating
+                    ? isEditMode
+                        ? "Updating..."
+                        : "Adding..."
+                    : isEditMode
+                        ? "Update Transaction"
+                        : "Add Transaction"}
             </button>
         </form>
     );

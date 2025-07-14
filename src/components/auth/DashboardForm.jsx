@@ -4,9 +4,7 @@ import {
   BarChart3,
   MoreHorizontal,
   Plus,
-  Smartphone,
-  UtensilsCrossed,
-  Menu
+  Menu,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { format, parseISO, isToday } from "date-fns";
@@ -19,8 +17,24 @@ export default function DashboardForm() {
   const [activeTab, setActiveTab] = useState("Transactions");
   const [username, setUsername] = useState("User");
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { data, isSuccess } = getTransactionUser();
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editTransaction, setEditTransaction] = useState(null)
+
+  // Icon map based on TransactionForm
+  const iconMap = {
+    Salary: "💼",
+    Freelance: "🧑‍💻",
+    Investment: "📈",
+    Gift: "🎁",
+    Other: "📦",
+    Food: "🍽️",
+    Transport: "🚗",
+    Shopping: "🛍️",
+    Utilities: "💡",
+    Health: "💊",
+    Entertainment: "🎬",
+  };
 
   useEffect(() => {
     const storedName = localStorage.getItem("username");
@@ -41,12 +55,6 @@ export default function DashboardForm() {
 
   const netTotal = incomeTotal - expenseTotal;
 
-  // const summaryData = [
-  //   { label: "Income", value: `Rs. ${incomeTotal.toFixed(2)}`, color: "text-blue-600" },
-  //   { label: "Expense", value: `Rs. ${expenseTotal.toFixed(2)}`, color: "text-red-500" },
-  //   { label: "Total", value: `Rs. ${netTotal.toFixed(2)}`, color: "text-gray-800" },
-  // ];
-
   const sidebarItems = [
     { icon: Calendar, label: "Transactions", route: "/dashboard" },
     { icon: BarChart3, label: "Stats", route: "/stats" },
@@ -59,10 +67,9 @@ export default function DashboardForm() {
   };
 
   const groupByDate = (transactions) => {
-    const sorted = [...transactions].sort((a, b) => {
-      return new Date(b.createdAt) - new Date(a.createdAt);
-    });
-
+    const sorted = [...transactions].sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
     return sorted.reduce((acc, txn) => {
       const date = format(parseISO(txn.date), "yyyy-MM-dd");
       if (!acc[date]) acc[date] = [];
@@ -73,9 +80,9 @@ export default function DashboardForm() {
 
   const refreshDashboard = () => {
     if (isSuccess) {
-      setTransactions(data?.data || [])
+      setTransactions(data?.data || []);
     }
-  }
+  };
 
   const groupedTransactions = groupByDate(transactions);
 
@@ -83,7 +90,6 @@ export default function DashboardForm() {
       <div className="min-h-screen bg-gradient-to-tr from-[#fff7f5] to-[#fbe3df] flex font-sans">
         {/* Sidebar */}
         <div className={`transition-all duration-300 ${isCollapsed ? "w-20" : "w-80"} bg-gradient-to-b from-red-400 to-red-500 p-4 flex flex-col items-center`}>
-
           {/* Top Row: Username + Toggle */}
           <div className="w-full mb-6 flex items-center justify-between">
             {!isCollapsed && (
@@ -105,14 +111,10 @@ export default function DashboardForm() {
                 <button
                     key={index}
                     onClick={() => {
-                      setActiveTab(item.label)
-                      navigate(item.route)
+                      setActiveTab(item.label);
+                      navigate(item.route);
                     }}
-                    className={`w-full flex items-center ${isCollapsed ? "justify-center" : "justify-start space-x-3 px-4"} py-3 rounded-2xl transition-all duration-200 ${
-                        item.label === activeTab
-                            ? "bg-white text-gray-800 shadow-md"
-                            : "bg-white/10 text-white hover:bg-white/20 border border-white/20"
-                    }`}
+                    className={`w-full flex items-center ${isCollapsed ? "justify-center" : "justify-start space-x-3 px-4"} py-3 rounded-2xl transition-all duration-200 ${item.label === activeTab ? "bg-white text-gray-800 shadow-md" : "bg-white/10 text-white hover:bg-white/20 border border-white/20"}`}
                 >
                   <item.icon className="w-6 h-6" />
                   {!isCollapsed && <span className="font-medium">{item.label}</span>}
@@ -176,7 +178,7 @@ export default function DashboardForm() {
 
           {/* Transaction History by Date */}
           <div className="rounded-2xl p-6 bg-white shadow-[0_8px_20px_rgba(0,0,0,0.05)] border border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-800 mb-6">Transaction History</h2>
+            <h2 className="text-xl font-semibold text-gray-800 mb-6">Transaction History</h2>
             <div className="space-y-8 max-h-[500px] overflow-y-auto pr-2">
               {Object.entries(groupedTransactions).map(([date, txns]) => (
                   <div key={date}>
@@ -185,15 +187,20 @@ export default function DashboardForm() {
                     </h3>
                     <div className="space-y-3">
                       {txns.map((item, index) => {
-                        const Icon = item.category.toLowerCase().includes("food") ? UtensilsCrossed : Smartphone;
+                        const icon = iconMap[item.category] || "📦";
                         return (
                             <div
                                 key={index}
-                                className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-xl transition-colors duration-200"
+                                onClick={() => {
+                                  setEditTransaction(item);
+                                  setIsModalOpen(true);
+                                }}
+                                className="cursor-pointer flex items-center justify-between p-4 hover:bg-gray-50 rounded-xl transition-colors duration-200"
                             >
-                              <div className="flex items-center space-x-4">
-                                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
-                                  <Icon className="w-6 h-6 text-gray-600" />
+
+                            <div className="flex items-center space-x-4">
+                                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-xl">
+                                  {icon}
                                 </div>
                                 <div>
                                   <p className={`font-semibold ${item.type === "expense" ? "text-red-500" : "text-blue-600"}`}>
@@ -226,8 +233,14 @@ export default function DashboardForm() {
 
           <TransactionModal
               isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
+              onClose={
+                () => {
+                  setIsModalOpen(false);
+                  setEditTransaction(null)
+                  }
+                }
               onSuccess={refreshDashboard}
+              initialData={editTransaction}
           />
         </div>
       </div>

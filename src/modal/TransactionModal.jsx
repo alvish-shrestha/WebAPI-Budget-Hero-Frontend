@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import TransactionForm from "../components/auth/TransactionForm.jsx";
 
-export default function TransactionModal({ isOpen, onClose, onSuccess }) {
+export default function TransactionModal({ isOpen, onClose, onSuccess, initialData }) {
     const modalRef = useRef();
 
     // ESC key to close
@@ -45,7 +45,11 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }) {
                         >
                             &times;
                         </button>
-                        <TransactionForm onSuccess={onSuccess} onClose={onClose} />
+                        <TransactionForm
+                            onSuccess={onSuccess}
+                            onClose={onClose}
+                            initialData={initialData}
+                        />
                     </motion.div>
                 </motion.div>
             )}
