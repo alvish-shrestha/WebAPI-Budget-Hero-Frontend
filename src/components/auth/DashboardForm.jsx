@@ -104,7 +104,6 @@ export default function DashboardForm() {
     setShowLogoutModal(false);
   };
 
-
   return (
       <div className="min-h-screen bg-gradient-to-tr from-[#fff7f5] to-[#fbe3df] flex font-sans">
         {/* Sidebar */}
