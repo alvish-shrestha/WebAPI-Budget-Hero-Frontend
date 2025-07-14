@@ -7,6 +7,7 @@ import { useGetGoals, useDeleteGoal } from "../../hooks/useGoalUser.js";
 import { ConfirmDeleteModal } from "../../modal/ConfirmDeleteGoalModal.jsx";
 import { toast } from "react-toastify";
 import ContributeModal from "../../modal/ContributeModal.jsx";
+import Sidebar from "../../layouts/Sidebar.jsx";
 
 export default function GoalList() {
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -36,46 +37,13 @@ export default function GoalList() {
         setGoalToDelete(goal);
     };
 
-    const sidebarItems = [
-        { icon: Calendar, label: "Transactions", route: "/dashboard" },
-        { icon: BarChart3, label: "Stats", route: "/stats" },
-        { icon: Target, label: "Goal", route: "/goals" },
-        { icon: MoreHorizontal, label: "More", route: "/more" },
-    ];
-
     return (
         <div className="min-h-screen flex bg-gradient-to-tr from-[#fff7f5] to-[#fbe3df] font-sans">
-            {/* Sidebar */}
-            <div className={`transition-all ${isCollapsed ? "w-20" : "w-80"} bg-gradient-to-b from-red-400 to-red-500 p-4 flex flex-col items-center`}>
-                <div className="w-full mb-6 flex items-center justify-between">
-                    {!isCollapsed && (
-                        <div className="bg-white/10 text-white backdrop-blur-md rounded-2xl py-3 px-4 border border-white/20 font-semibold">
-                            Hi, {username}
-                        </div>
-                    )}
-                    <button
-                        onClick={() => setIsCollapsed(!isCollapsed)}
-                        className="bg-white/10 hover:bg-white/20 border border-white/20 rounded-full p-2"
-                    >
-                        <Menu className="text-white" />
-                    </button>
-                </div>
-
-                {sidebarItems.map((item) => (
-                    <button
-                        key={item.route}
-                        onClick={() => navigate(item.route)}
-                        className={`w-full py-3 px-4 mb-2 rounded-2xl flex items-center ${isCollapsed ? "justify-center" : "justify-start gap-3"
-                            } ${location.pathname === item.route
-                                ? "bg-white text-gray-900 shadow"
-                                : "text-white hover:bg-white/20 border border-white/20"
-                            }`}
-                    >
-                        <item.icon />
-                        {!isCollapsed && <span>{item.label}</span>}
-                    </button>
-                ))}
-            </div>
+            <Sidebar
+                username={username}
+                isCollapsed={isCollapsed}
+                setIsCollapsed={setIsCollapsed}
+            />
 
             {/* Main Content */}
             <div className="flex-1 p-10">
