@@ -40,9 +40,9 @@ export default function LoginForm() {
             localStorage.setItem("username", username);
 
             if (role === "admin") {
-              navigate("/admin");
+              navigate("/admin", { replace: true });
             } else {
-              navigate("/dashboard");
+              navigate("/dashboard", { replace: true });
             }
           },
         })

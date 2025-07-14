@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { useAddTransaction, useUpdateTransaction, useDeleteTransaction } from "../../hooks/useTransactionUser";
 import { toast } from "react-toastify";
 import { UpdateTransactionModal } from "../../modal/UpdateTransactionModal.jsx";
+import { DeleteTransactionModal } from "../../modal/DeleteModal.jsx";
 
 export default function TransactionForm({ onClose, onSuccess, initialData }) {
     const { mutate: addTransaction, isPending: isAdding } = useAddTransaction();
@@ -97,47 +98,18 @@ export default function TransactionForm({ onClose, onSuccess, initialData }) {
         },
     });
 
-    const handleDelete = () => {
-        toast.info(
-            ({ closeToast }) => (
-                <div className="space-y-2">
-                    <p>Are you sure you want to delete this transaction?</p>
-                    <div className="flex justify-end gap-4">
-                        <button
-                            onClick={() => {
-                                deleteTransaction(initialData._id, {
-                                    onSuccess: () => {
-                                        closeToast();
-                                        onClose?.();
-                                        onSuccess?.();
-                                    },
-                                    onError: () => {
-                                        closeToast();
-                                    },
-                                });
-                            }}
-                            className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm"
-                        >
-                            Yes
-                        </button>
-                        <button
-                            onClick={closeToast}
-                            className="px-3 py-1 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 text-sm"
-                        >
-                            No
-                        </button>
-                    </div>
-                </div>
-            ),
-            {
-                autoClose: false,
-                closeOnClick: false,
-                closeButton: false,
-                draggable: false,
-            }
-        );
-    };
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+    const confirmDelete = () => {
+        deleteTransaction(initialData._id, {
+            onSuccess: () => {
+                onClose?.();
+                onSuccess?.();
+            },
+            onError: () => toast.error("Failed to delete transaction"),
+        });
+        setShowDeleteModal(false);
+    };
 
     const categoryOptions =
         formik.values.type === "income" ? incomeCategories : expenseCategories;
@@ -288,7 +260,7 @@ export default function TransactionForm({ onClose, onSuccess, initialData }) {
                     </button>
                     <button
                         type="button"
-                        onClick={handleDelete}
+                        onClick={() => setShowDeleteModal(true)}
                         className="w-12 h-12 flex items-center justify-center border border-red-600 text-red-600 hover:bg-red-600 hover:text-white font-bold text-lg rounded-full transition-all"
                         disabled={isDeleting}
                         title="Delete Transaction"
@@ -309,6 +281,11 @@ export default function TransactionForm({ onClose, onSuccess, initialData }) {
                 isOpen={showConfirmModal}
                 onConfirm={confirmUpdate}
                 onCancel={() => setShowConfirmModal(false)}
+            />
+            <DeleteTransactionModal
+                isOpen={showDeleteModal}
+                onConfirm={confirmDelete}
+                onCancel={() => setShowDeleteModal(false)}
             />
         </form>
     );
