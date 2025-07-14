@@ -14,6 +14,7 @@ import LearnMore from '../pages/LearnMore';
 import Stats from "../pages/Stats.jsx";
 import More from "../pages/More.jsx";
 import Transaction from "../pages/Transaction.jsx";
+import Goal from "../pages/Goal.jsx";
 
 const AppRouter = () => (
   <Router>
@@ -27,6 +28,7 @@ const AppRouter = () => (
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/transaction" element={<Transaction />} />
       <Route path="/stats" element={<Stats />} />
+      <Route path="/goals" element={<Goal />} />
       <Route path="/more" element={<More />} />
 
       <Route path='/admin/*' element={<AdminMainLayout/>}>

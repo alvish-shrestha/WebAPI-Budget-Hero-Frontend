@@ -5,8 +5,9 @@ import {
   MoreHorizontal,
   Plus,
   Menu,
+  Target, // ✅ Added icon
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   format,
   parseISO,
@@ -24,6 +25,7 @@ import { LogoutModal } from "../../modal/LogoutModal.jsx";
 
 export default function DashboardForm() {
   const navigate = useNavigate();
+  const location = useLocation(); // ✅ for active route highlighting
   const [username, setUsername] = useState("User");
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -88,21 +90,16 @@ export default function DashboardForm() {
   const sidebarItems = [
     { icon: Calendar, label: "Transactions", route: "/dashboard" },
     { icon: BarChart3, label: "Stats", route: "/stats" },
+    { icon: Target, label: "Goal", route: "/goals" },
     { icon: MoreHorizontal, label: "More", route: "/more" },
   ];
 
-  const confirmLogout = () => {
-    setShowLogoutModal(true);
-  };
-
+  const confirmLogout = () => setShowLogoutModal(true);
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     navigate("/login");
   };
-
-  const cancelLogout = () => {
-    setShowLogoutModal(false);
-  };
+  const cancelLogout = () => setShowLogoutModal(false);
 
   return (
       <div className="min-h-screen bg-gradient-to-tr from-[#fff7f5] to-[#fbe3df] flex font-sans">
@@ -141,9 +138,7 @@ export default function DashboardForm() {
                     }`}
                 >
                   <item.icon className="w-6 h-6" />
-                  {!isCollapsed && (
-                      <span className="font-medium">{item.label}</span>
-                  )}
+                  {!isCollapsed && <span className="font-medium">{item.label}</span>}
                 </button>
             ))}
           </div>
@@ -168,15 +163,14 @@ export default function DashboardForm() {
 
           {/* Summary Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
-            {[
-              {
-                label: "Income",
-                value: `Rs. ${incomeTotal.toFixed(2)}`,
-                color: "text-blue-600",
-                icon: "💰",
-                bg: "bg-blue-50",
-                shadow: "shadow-[0_8px_20px_rgba(59,130,246,0.15)]",
-              },
+            {[{
+              label: "Income",
+              value: `Rs. ${incomeTotal.toFixed(2)}`,
+              color: "text-blue-600",
+              icon: "💰",
+              bg: "bg-blue-50",
+              shadow: "shadow-[0_8px_20px_rgba(59,130,246,0.15)]",
+            },
               {
                 label: "Expense",
                 value: `Rs. ${expenseTotal.toFixed(2)}`,
@@ -192,8 +186,7 @@ export default function DashboardForm() {
                 icon: "🧾",
                 bg: "bg-gray-100",
                 shadow: "shadow-[0_8px_20px_rgba(107,114,128,0.15)]",
-              },
-            ].map((item, index) => (
+              }].map((item, index) => (
                 <div
                     key={index}
                     className={`flex items-center space-x-4 p-6 rounded-2xl ${item.bg} ${item.shadow} transition-all duration-300`}
@@ -207,7 +200,7 @@ export default function DashboardForm() {
             ))}
           </div>
 
-          {/* Transaction History with Month Navigation */}
+          {/* Transaction History */}
           <div className="rounded-2xl p-6 bg-white shadow-[0_8px_20px_rgba(0,0,0,0.05)] border border-gray-200">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-gray-800">Transaction History</h2>
@@ -230,7 +223,6 @@ export default function DashboardForm() {
               </div>
             </div>
 
-            {/* Animated Transaction List */}
             <AnimatePresence mode="wait">
               <motion.div
                   key={format(currentMonth, "yyyy-MM")}
