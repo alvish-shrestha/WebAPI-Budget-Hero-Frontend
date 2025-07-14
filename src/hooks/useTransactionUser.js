@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 // Fetch all transactions
 export const useGetTransaction = () => {
     return useQuery({
-        queryKey: ["dashboard-user"],
+        queryKey: ["transactions"],
         queryFn: getTransactionUserService,
         onError: (err) => {
             toast.error(err?.message || "Failed to fetch transactions");
@@ -29,7 +29,7 @@ export const useAddTransaction = () => {
         mutationFn: (data) => addTransactionUserService(data),
         onSuccess: async () => {
             toast.success("Transaction added!");
-            await queryClient.invalidateQueries({ queryKey: ["dashboard-user"] });
+            await queryClient.invalidateQueries({ queryKey: ["transactions"] });
         },
         onError: (err) => {
             toast.error(err?.message || "Failed to add transaction");
@@ -45,7 +45,7 @@ export const useUpdateTransaction = () => {
         mutationFn: ({ id, data }) => updateTransactionUserService(id, data),
         onSuccess: async () => {
             toast.success("Transaction updated!");
-            await queryClient.invalidateQueries({ queryKey: ["dashboard-user"] });
+            await queryClient.invalidateQueries({ queryKey: ["transactions"] });
         },
         onError: (err) => {
             toast.error(err?.message || "Failed to update transaction");
@@ -61,7 +61,7 @@ export const useDeleteTransaction = () => {
         mutationFn: (id) => deleteTransactionUserService(id),
         onSuccess: async () => {
             toast.success("Transaction deleted!");
-            await queryClient.invalidateQueries({ queryKey: ["dashboard-user"] });
+            await queryClient.invalidateQueries({ queryKey: ["transactions"] });
         },
         onError: (err) => {
             toast.error(err?.message || "Failed to delete transaction");

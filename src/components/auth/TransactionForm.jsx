@@ -1,8 +1,10 @@
 import React from "react";
+import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useAddTransaction, useUpdateTransaction, useDeleteTransaction } from "../../hooks/useTransactionUser";
 import { toast } from "react-toastify";
+import { UpdateTransactionModal } from "../../modal/UpdateTransactionModal.jsx";
 
 export default function TransactionForm({ onClose, onSuccess, initialData }) {
     const { mutate: addTransaction, isPending: isAdding } = useAddTransaction();
@@ -48,6 +50,24 @@ export default function TransactionForm({ onClose, onSuccess, initialData }) {
         description: Yup.string(),
     });
 
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [pendingValues, setPendingValues] = useState(null);
+
+    const confirmUpdate = () => {
+        updateTransaction(
+            { id: initialData._id, data: pendingValues },
+            {
+                onSuccess: () => {
+                    formik.resetForm();
+                    onClose?.();
+                    onSuccess?.();
+                },
+                onError: () => toast.error("Failed to update transaction"),
+            }
+        );
+        setShowConfirmModal(false);
+    };
+
     const formik = useFormik({
         initialValues: {
             type: initialData?.type || "expense",
@@ -62,17 +82,8 @@ export default function TransactionForm({ onClose, onSuccess, initialData }) {
         validationSchema,
         onSubmit: async (values, { resetForm }) => {
             if (isEditMode) {
-                updateTransaction(
-                    { id: initialData._id, data: values },
-                    {
-                        onSuccess: () => {
-                            resetForm();
-                            onClose?.();
-                            onSuccess?.();
-                        },
-                        onError: () => toast.error("Failed to update transaction"),
-                    }
-                );
+                setPendingValues(values)
+                setShowConfirmModal(true)
             } else {
                 addTransaction(values, {
                     onSuccess: () => {
@@ -294,6 +305,11 @@ export default function TransactionForm({ onClose, onSuccess, initialData }) {
                     {isAdding ? "Adding..." : "Add Transaction"}
                 </button>
             )}
+            <UpdateTransactionModal
+                isOpen={showConfirmModal}
+                onConfirm={confirmUpdate}
+                onCancel={() => setShowConfirmModal(false)}
+            />
         </form>
     );
 }
