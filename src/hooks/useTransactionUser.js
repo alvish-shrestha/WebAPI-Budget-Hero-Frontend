@@ -6,8 +6,6 @@ import {
 } from "../services/dashboardService.js";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-// import { AuthContext } from "../auth/AuthProvider";
-// import { useContext } from "react";
 
 // Fetch all transactions
 export const useGetTransaction = () => {
