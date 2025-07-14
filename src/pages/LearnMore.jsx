@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 
 import Header from "../layouts/Header"
 import Footer from "../layouts/Footer"

@@ -34,6 +34,10 @@ export default function LoginForm() {
         mutate(data, {
           onSuccess: (response) => {
             const role = response?.data?.role;
+            const username = response?.data?.username;
+
+            // save to local storage
+            localStorage.setItem("username", username);
 
             if (role === "admin") {
               navigate("/admin");

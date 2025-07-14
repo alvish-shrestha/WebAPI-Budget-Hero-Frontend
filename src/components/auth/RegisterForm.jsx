@@ -3,12 +3,14 @@ import { Eye, EyeOff } from "lucide-react"
 import { useRegisterUser } from "../../hooks/useRegisterUser";
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterForm() {
   const { mutate, data, error, isPending, isSuccess, isError } = useRegisterUser()
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate(); 
 
   const validationSchema = Yup.object(
     {
@@ -34,7 +36,11 @@ export default function RegisterForm() {
       onSubmit: (data) => {
         // data is an obect of state of values, email, password
         console.log("Registering with:", data);
-        mutate(data)
+        mutate(data, {
+          onSuccess: () => {
+            navigate("/login")
+          },
+        })
       }
     }
   )

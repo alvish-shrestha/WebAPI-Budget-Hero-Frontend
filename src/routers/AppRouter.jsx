@@ -11,6 +11,8 @@ import FeedbackManagement from '../pages/admin/FeedbackManagement';
 import DashboardManagement from '../pages/admin/DashboardManagement';
 import Homepage from '../pages/Homepage';
 import LearnMore from '../pages/LearnMore';
+import Stats from "../pages/Stats.jsx";
+import More from "../pages/More.jsx";
 
 const AppRouter = () => (
   <Router>
@@ -22,6 +24,8 @@ const AppRouter = () => (
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/stats" element={<Stats />} />
+      <Route path="/more" element={<More />} />
 
       <Route path='/admin/*' element={<AdminMainLayout/>}>
         <Route index element={<DashboardManagement />}/>
