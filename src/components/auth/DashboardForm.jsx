@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import {
   Calendar,
   BarChart3,
-  CreditCard,
   MoreHorizontal,
   Plus,
   Smartphone,
@@ -11,7 +10,8 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { format, parseISO, isToday } from "date-fns";
-import { useDashboardUser } from "../../hooks/useDashboardUser";
+import { getTransactionUser } from "../../hooks/useTransactionUser.js";
+import TransactionModal from "../../modal/TransactionModal.jsx";
 
 export default function DashboardForm() {
   const navigate = useNavigate();
@@ -19,8 +19,8 @@ export default function DashboardForm() {
   const [activeTab, setActiveTab] = useState("Transactions");
   const [username, setUsername] = useState("User");
   const [isCollapsed, setIsCollapsed] = useState(false);
-
-  const { data, isSuccess } = useDashboardUser();
+  const { data, isSuccess } = getTransactionUser();
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     const storedName = localStorage.getItem("username");
@@ -41,11 +41,11 @@ export default function DashboardForm() {
 
   const netTotal = incomeTotal - expenseTotal;
 
-  const summaryData = [
-    { label: "Income", value: `Rs. ${incomeTotal.toFixed(2)}`, color: "text-blue-600" },
-    { label: "Expense", value: `Rs. ${expenseTotal.toFixed(2)}`, color: "text-red-500" },
-    { label: "Total", value: `Rs. ${netTotal.toFixed(2)}`, color: "text-gray-800" },
-  ];
+  // const summaryData = [
+  //   { label: "Income", value: `Rs. ${incomeTotal.toFixed(2)}`, color: "text-blue-600" },
+  //   { label: "Expense", value: `Rs. ${expenseTotal.toFixed(2)}`, color: "text-red-500" },
+  //   { label: "Total", value: `Rs. ${netTotal.toFixed(2)}`, color: "text-gray-800" },
+  // ];
 
   const sidebarItems = [
     { icon: Calendar, label: "Transactions", route: "/dashboard" },
@@ -70,6 +70,12 @@ export default function DashboardForm() {
       return acc;
     }, {});
   };
+
+  const refreshDashboard = () => {
+    if (isSuccess) {
+      setTransactions(data?.data || [])
+    }
+  }
 
   const groupedTransactions = groupByDate(transactions);
 
@@ -212,11 +218,17 @@ export default function DashboardForm() {
 
           {/* Floating Add Button */}
           <button
-              onClick={() => navigate("/transaction")}
+              onClick={() => setIsModalOpen(true)}
               className="fixed bottom-8 right-8 w-16 h-16 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group"
           >
             <Plus className="w-8 h-8 group-hover:scale-110 transition-transform duration-200" />
           </button>
+
+          <TransactionModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              onSuccess={refreshDashboard}
+          />
         </div>
       </div>
   );

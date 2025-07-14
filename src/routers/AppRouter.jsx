@@ -13,6 +13,7 @@ import Homepage from '../pages/Homepage';
 import LearnMore from '../pages/LearnMore';
 import Stats from "../pages/Stats.jsx";
 import More from "../pages/More.jsx";
+import Transaction from "../pages/Transaction.jsx";
 
 const AppRouter = () => (
   <Router>
@@ -26,6 +27,7 @@ const AppRouter = () => (
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/stats" element={<Stats />} />
       <Route path="/more" element={<More />} />
+      <Route path="/transaction" element={<Transaction />} />
 
       <Route path='/admin/*' element={<AdminMainLayout/>}>
         <Route index element={<DashboardManagement />}/>
