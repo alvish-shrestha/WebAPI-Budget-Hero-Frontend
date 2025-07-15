@@ -1,4 +1,5 @@
 // components/modals/ConfirmUpdateModal.jsx
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function UpdateTransactionModal({ isOpen, onConfirm, onCancel }) {
