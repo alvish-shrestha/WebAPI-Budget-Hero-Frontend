@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Menu, Plus, Calendar, BarChart3, Target, MoreHorizontal } from "lucide-react";
-import GoalCard from "./Goal/GoalCard.jsx";
+import GoalCard from "../../cards/GoalCard.jsx";
 import GoalModal from "../../modal/GoalModal.jsx";
 import { useGetGoals, useDeleteGoal } from "../../hooks/useGoalUser.js";
 import { ConfirmDeleteModal } from "../../modal/ConfirmDeleteGoalModal.jsx";

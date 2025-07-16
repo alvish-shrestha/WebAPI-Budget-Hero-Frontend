@@ -69,8 +69,8 @@ export default function GoalCard({ goal, onEdit, onDelete, onContribute }) {
                     <div>
                         <h2 className="text-lg font-bold text-gray-800">{title}</h2>
                         <p className="text-sm text-gray-500 mt-1">
-                            Target: ₹{targetAmount.toLocaleString()} <br />
-                            Saved: ₹{currentAmount.toLocaleString()}
+                            Target: Rs. {targetAmount.toLocaleString()} <br />
+                            Saved: Rs. {currentAmount.toLocaleString()}
                         </p>
                     </div>
                 </div>

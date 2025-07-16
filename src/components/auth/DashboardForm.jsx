@@ -5,7 +5,7 @@ import {
   MoreHorizontal,
   Plus,
   Menu,
-  Target, // ✅ Added icon
+  Target,
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
@@ -19,28 +19,59 @@ import {
   isWithinInterval,
 } from "date-fns";
 import { useGetTransaction } from "../../hooks/useTransactionUser.js";
+import { useStreakUser } from "../../hooks/useStreakUser.js";
 import TransactionModal from "../../modal/TransactionModal.jsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { LogoutModal } from "../../modal/LogoutModal.jsx";
 import Sidebar from "../../layouts/Sidebar.jsx";
+import StreakCardModal from "../../modal/StreakCardModal.jsx";
+import { Tooltip } from "react-tooltip";
+import { launchConfetti } from "../../utils/streakConfetti";
+import { toast } from "react-toastify";
 
 export default function DashboardForm() {
   const navigate = useNavigate();
-  const location = useLocation(); // ✅ for active route highlighting
+  const location = useLocation();
   const [username, setUsername] = useState("User");
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editTransaction, setEditTransaction] = useState(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [isStreakModalOpen, setIsStreakModalOpen] = useState(false);
 
   const { data, isSuccess } = useGetTransaction();
   const transactions = data?.data || [];
+
+  const {
+    data: streakData,
+    isLoading: isStreakLoading,
+    refetch: refetchStreak,
+  } = useStreakUser();
 
   useEffect(() => {
     const storedName = localStorage.getItem("username");
     if (storedName) setUsername(storedName);
   }, []);
+
+  // 🔥 Track and celebrate streak updates
+  useEffect(() => {
+    const current = streakData?.streak?.current;
+    if (!current) return;
+
+    const last = parseInt(localStorage.getItem("lastStreakCount")) || 0;
+
+    if (current > last) {
+      launchConfetti();
+      toast.success(`🔥 Day ${current}! You're on fire!`, {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      localStorage.setItem("lastStreakCount", current);
+    } else if (current < last) {
+      localStorage.setItem("lastStreakCount", current); // reset on break
+    }
+  }, [streakData?.streak?.current]);
 
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(currentMonth);
@@ -97,17 +128,34 @@ export default function DashboardForm() {
 
   return (
       <div className="min-h-screen bg-gradient-to-tr from-[#fff7f5] to-[#fbe3df] flex font-sans">
-        {/* Sidebar */}
         <Sidebar
             username={username}
             isCollapsed={isCollapsed}
             setIsCollapsed={setIsCollapsed}
+            streakCount={streakData?.streak?.current}
         />
 
-        {/* Main Content */}
         <div className="flex-1 p-10">
-          <div className="flex justify-between items-center mb-10">
-            <h1 className="text-3xl font-bold text-gray-800">Welcome to Budget Hero</h1>
+          <div className="flex justify-between items-center mb-10 flex-wrap gap-4">
+            <div className="flex items-center gap-4">
+              <h1 className="text-3xl font-bold text-gray-800">
+                Welcome to Budget Hero
+              </h1>
+
+              {streakData?.streak?.current > 0 && (
+                  <button
+                      onClick={() => setIsStreakModalOpen(true)}
+                      data-tooltip-id="streak-tip"
+                      data-tooltip-content={`🏆 Best: ${streakData.streak.best} days`}
+                      className="animate-pulse bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1 hover:bg-orange-200 transition"
+                  >
+                    🔥 {streakData.streak.current}{" "}
+                    {streakData.streak.current === 1 ? "day" : "days"}
+                  </button>
+              )}
+              <Tooltip id="streak-tip" />
+            </div>
+
             <p
                 onClick={confirmLogout}
                 className="text-red-600 hover:text-red-700 underline cursor-pointer font-semibold text-xl"
@@ -123,14 +171,15 @@ export default function DashboardForm() {
 
           {/* Summary Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
-            {[{
-              label: "Income",
-              value: `Rs. ${incomeTotal.toFixed(2)}`,
-              color: "text-blue-600",
-              icon: "💰",
-              bg: "bg-blue-50",
-              shadow: "shadow-[0_8px_20px_rgba(59,130,246,0.15)]",
-            },
+            {[
+              {
+                label: "Income",
+                value: `Rs. ${incomeTotal.toFixed(2)}`,
+                color: "text-blue-600",
+                icon: "💰",
+                bg: "bg-blue-50",
+                shadow: "shadow-[0_8px_20px_rgba(59,130,246,0.15)]",
+              },
               {
                 label: "Expense",
                 value: `Rs. ${expenseTotal.toFixed(2)}`,
@@ -146,7 +195,8 @@ export default function DashboardForm() {
                 icon: "🧾",
                 bg: "bg-gray-100",
                 shadow: "shadow-[0_8px_20px_rgba(107,114,128,0.15)]",
-              }].map((item, index) => (
+              },
+            ].map((item, index) => (
                 <div
                     key={index}
                     className={`flex items-center space-x-4 p-6 rounded-2xl ${item.bg} ${item.shadow} transition-all duration-300`}
@@ -163,7 +213,9 @@ export default function DashboardForm() {
           {/* Transaction History */}
           <div className="rounded-2xl p-6 bg-white shadow-[0_8px_20px_rgba(0,0,0,0.05)] border border-gray-200">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-gray-800">Transaction History</h2>
+              <h2 className="text-xl font-semibold text-gray-800">
+                Transaction History
+              </h2>
               <div className="flex items-center space-x-4">
                 <button
                     onClick={() => setCurrentMonth((prev) => subMonths(prev, 1))}
@@ -265,8 +317,16 @@ export default function DashboardForm() {
                 setIsModalOpen(false);
                 setEditTransaction(null);
               }}
-              onSuccess={() => {}}
+              onSuccess={ async () => {
+                await refetchStreak();
+              }}
               initialData={editTransaction}
+          />
+
+          <StreakCardModal
+              isOpen={isStreakModalOpen}
+              onClose={() => setIsStreakModalOpen(false)}
+              streakData={streakData}
           />
         </div>
       </div>
