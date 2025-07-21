@@ -10,9 +10,10 @@ export default function AdminMainLayout() {
   const [animateOut, setAnimateOut] = useState(false);
 
   const getPageTitle = () => {
+    if (location.pathname.includes("users")) return "User Management";
     if (location.pathname.includes("feedback")) return "Feedback Management";
     if (location.pathname.includes("system-activity")) return "System Activity Logs";
-    return "User Management";
+    return "Dashboard";
   };
 
   const confirmLogout = () => {
@@ -67,9 +68,8 @@ export default function AdminMainLayout() {
       {(showModal || animateOut) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm">
           <div
-            className={`bg-white w-full max-w-md rounded-xl shadow-xl p-6 relative ${
-              animateOut ? "animate-fadeOut" : "animate-fadeIn"
-            }`}
+            className={`bg-white w-full max-w-md rounded-xl shadow-xl p-6 relative ${animateOut ? "animate-fadeOut" : "animate-fadeIn"
+              }`}
           >
             <button
               onClick={closeModal}

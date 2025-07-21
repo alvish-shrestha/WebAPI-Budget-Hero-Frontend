@@ -7,7 +7,7 @@ import investmentGrowth from "../../assets/images/investment-growth.png";
 const HomepageForm = () => {
   return (
     <div className="font-sans bg-[#FFF7F4] text-[#1F2937] overflow-x-hidden">
-      
+
       {/* Hero Section */}
       <motion.section
         className="relative text-center py-20 bg-gradient-to-b from-[#FFEDE9] to-[#FFF7F4] overflow-hidden shadow-inner"

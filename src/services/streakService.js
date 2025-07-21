@@ -1,4 +1,4 @@
-import {getStreakApi} from "../api/streakApi.js";
+import { getStreakApi } from "../api/streakApi.js";
 
 export const getStreakService = async (params) => {
     try {

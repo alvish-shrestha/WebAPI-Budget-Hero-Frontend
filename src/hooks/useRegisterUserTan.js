@@ -7,14 +7,14 @@ import { data } from "react-router-dom";
 export const useRegisterUserTan = () => {
   return useMutation(
     {
-        mutationFn: registerUserService, // which funtion to run
-        mutationKey: ["register"], // key for this hook
-        onSuccess: (data) => {
-            toast.success(data.message || "Registration Successful")
-        },
-        onError: (err) => {
-            toast.error(err.message || "Registration Failed")
-        }
+      mutationFn: registerUserService, // which funtion to run
+      mutationKey: ["register"], // key for this hook
+      onSuccess: (data) => {
+        toast.success(data.message || "Registration Successful")
+      },
+      onError: (err) => {
+        toast.error(err.message || "Registration Failed")
+      }
     },
   );
 };

@@ -1,10 +1,16 @@
-import { Menu } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Calendar, BarChart3, MoreHorizontal, Target } from "lucide-react";
+import { Menu, Calendar, BarChart3, MoreHorizontal, Target } from "lucide-react";
 
-export default function Sidebar({ username, isCollapsed, setIsCollapsed }) {
+export default function Sidebar({ isCollapsed, setIsCollapsed, username }) {
     const navigate = useNavigate();
     const location = useLocation();
+
+    // // Update username if changed in localStorage
+    // useEffect(() => {
+    //     const stored = localStorage.getItem("username");
+    //     if (stored) setUsername(stored);
+    // }, []);
 
     const sidebarItems = [
         { icon: Calendar, label: "Transactions", route: "/dashboard" },
@@ -15,9 +21,8 @@ export default function Sidebar({ username, isCollapsed, setIsCollapsed }) {
 
     return (
         <div
-            className={`transition-all duration-300 ${
-                isCollapsed ? "w-20" : "w-80"
-            } bg-gradient-to-b from-red-400 to-red-500 p-4 flex flex-col items-center`}
+            className={`transition-all duration-300 ${isCollapsed ? "w-20" : "w-80"
+                } bg-gradient-to-b from-red-400 to-red-500 p-4 flex flex-col items-center`}
         >
             <div className="w-full mb-6 flex items-center justify-between">
                 {!isCollapsed && (
@@ -38,13 +43,11 @@ export default function Sidebar({ username, isCollapsed, setIsCollapsed }) {
                     <button
                         key={index}
                         onClick={() => navigate(item.route)}
-                        className={`w-full flex items-center ${
-                            isCollapsed ? "justify-center" : "justify-start space-x-3 px-4"
-                        } py-3 rounded-2xl transition-all duration-200 ${
-                            location.pathname === item.route
+                        className={`w-full flex items-center ${isCollapsed ? "justify-center" : "justify-start space-x-3 px-4"
+                            } py-3 rounded-2xl transition-all duration-200 ${location.pathname === item.route
                                 ? "bg-white text-gray-800 shadow-md"
                                 : "bg-white/10 text-white hover:bg-white/20 border border-white/20"
-                        }`}
+                            }`}
                     >
                         <item.icon className="w-6 h-6" />
                         {!isCollapsed && <span className="font-medium">{item.label}</span>}

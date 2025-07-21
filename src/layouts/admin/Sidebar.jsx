@@ -5,11 +5,10 @@ import { Users, MessageCircle, Activity, Home } from "lucide-react";
 export default function Sidebar() {
   const linkClass = ({ isActive }) =>
     `flex items-center gap-3 px-5 py-4 rounded-xl shadow-md transition-all duration-200 font-medium 
-     ${
-       isActive
-         ? "bg-red-500 text-white"
-         : "bg-white text-gray-700 hover:bg-red-100 hover:text-red-600"
-     }`;
+     ${isActive
+      ? "bg-red-500 text-white"
+      : "bg-white text-gray-700 hover:bg-red-100 hover:text-red-600"
+    }`;
 
   return (
     <aside className="w-72 min-h-screen p-6 bg-gray-50 flex flex-col items-center">

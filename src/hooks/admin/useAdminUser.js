@@ -43,8 +43,8 @@ export const useGetOneUser = (id) => {
         {
             queryKey: ["admin_users_detail", id],
             queryFn: () => getOneUserService(id),
-            enabled: !!id, 
-            retry: false 
+            enabled: !!id,
+            retry: false
         }
     )
     const user = query.data?.data || {}
@@ -57,7 +57,7 @@ export const useUpdateOneUser = () => {
     const queryClient = useQueryClient()
     return useMutation(
         {
-            mutationFn: ({id, data}) => updateOneUserService(id, data),
+            mutationFn: ({ id, data }) => updateOneUserService(id, data),
             mutationKey: ["admin_user_update"],
             onSuccess: () => {
                 toast.success("User Updated")

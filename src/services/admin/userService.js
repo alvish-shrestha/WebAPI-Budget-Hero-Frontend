@@ -16,7 +16,7 @@ export const getOneUserService = async (id) => {
         const response = await getOneUserApi(id)
         return response.data
     } catch (err) {
-        throw err.response?.data || { message: "Failed to fetch" }   
+        throw err.response?.data || { message: "Failed to fetch" }
     }
 }
 
@@ -35,7 +35,7 @@ export const updateOneUserService = async (id, data) => {
         const response = await updateOneUserApi(id, data)
         return response.data
     } catch (err) {
-        throw err.response?.data || { message: "Failed to upload" }   
+        throw err.response?.data || { message: "Failed to upload" }
     }
 }
 

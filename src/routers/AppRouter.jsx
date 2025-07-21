@@ -13,6 +13,7 @@ import Homepage from '../pages/Homepage';
 import LearnMore from '../pages/LearnMore';
 import Stats from "../pages/Stats.jsx";
 import More from "../pages/More.jsx";
+import Feedback from "../pages/Feedback.jsx";
 import Transaction from "../pages/Transaction.jsx";
 import Goal from "../pages/Goal.jsx";
 
@@ -30,13 +31,14 @@ const AppRouter = () => (
       <Route path="/stats" element={<Stats />} />
       <Route path="/goals" element={<Goal />} />
       <Route path="/more" element={<More />} />
+      <Route path="/feedback" element={<Feedback />} />
 
-      <Route path='/admin/*' element={<AdminMainLayout/>}>
-        <Route index element={<DashboardManagement />}/>
-        <Route path='users' element={<UserManagement />}/>
-        <Route path='system-activity' element={<SystemActivityManagement />}/>
-        <Route path='feedback' element={<FeedbackManagement />}/>
-        <Route path='*' element={<></>}/>
+      <Route path='/admin/*' element={<AdminMainLayout />}>
+        <Route index element={<DashboardManagement />} />
+        <Route path='users' element={<UserManagement />} />
+        <Route path='system-activity' element={<SystemActivityManagement />} />
+        <Route path='feedback' element={<FeedbackManagement />} />
+        <Route path='*' element={<></>} />
       </Route>
     </Routes>
   </Router>

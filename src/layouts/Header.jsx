@@ -6,10 +6,10 @@ const Header = () => {
   return (
     <header className="bg-[#FFEDE9] px-6 py-4 shadow-md border-b border-[#fcdcd4]">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        
+
         {/* Logo */}
-        <Link 
-          to="/" 
+        <Link
+          to="/"
           className="flex items-center space-x-2 text-[#F55345] font-extrabold text-2xl tracking-tight"
         >
           <img src={icon} alt="Budget Hero Icon" className="h-8 w-8" />
@@ -18,13 +18,13 @@ const Header = () => {
 
         {/* Navigation */}
         <nav className="flex items-center gap-6 text-[#1F2937] font-medium">
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="hover:text-[#F55345] transition-colors duration-200"
           >
             Home
           </Link>
-          <Link 
+          <Link
             to="/login"
             className="hover:text-[#F55345] transition-colors duration-200"
           >

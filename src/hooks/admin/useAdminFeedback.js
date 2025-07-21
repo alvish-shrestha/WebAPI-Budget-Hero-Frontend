@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  createFeedbackService,
   deleteFeedbackService,
   getAllFeedbackService,
   getOneFeedbackService,
@@ -22,21 +21,6 @@ export const useAdminFeedback = () => {
   return {
     ...query,
   };
-};
-
-export const useCreateFeedback = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationKey: ["admin_create_feedback"],
-    mutationFn: createFeedbackService,
-    onSuccess: () => {
-      toast.success("Feedback Created");
-      queryClient.invalidateQueries("admin_feedback");
-    },
-    onError: (err) => {
-      toast.error(err.message || "Failed to create feedback");
-    },
-  });
 };
 
 export const useGetOneFeedback = (id) => {

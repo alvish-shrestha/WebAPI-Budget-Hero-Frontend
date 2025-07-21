@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom'
 export default function UserManagement() {
   return (
     <div>
-        <UserTable />
+      <UserTable />
     </div>
   )
 }
