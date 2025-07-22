@@ -6,6 +6,7 @@ import { Eye, EyeOff } from "lucide-react"
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from 'react-router-dom';
+import ForgotPasswordModal from "../../modal/ForgotPasswordModal.jsx";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,6 +14,7 @@ export default function LoginForm() {
   const { mutate, isPending } = useLoginUser();
 
   const navigate = useNavigate();
+  const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
 
   const validationSchema = Yup.object(
     {
@@ -116,7 +118,10 @@ export default function LoginForm() {
                   </button>
                 </div>
                 <div className="text-right mt-2">
-                  <a href="/forgot-password" className="text-red-100 hover:text-white text-sm underline">
+                  <a
+                      onClick={() => setIsForgotModalOpen(true)}
+                      className="text-red-100 hover:text-white text-sm underline cursor-pointer"
+                  >
                     Forgot Password?
                   </a>
                 </div>
@@ -130,6 +135,11 @@ export default function LoginForm() {
                 SIGN IN
               </button>
             </form>
+
+            <ForgotPasswordModal
+                isOpen={isForgotModalOpen}
+                onClose={() => setIsForgotModalOpen(false)}
+            />
 
             <div className="mt-6 text-center">
               <p className="text-red-100 mb-4">or sign in with</p>
