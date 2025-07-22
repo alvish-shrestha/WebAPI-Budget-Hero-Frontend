@@ -1,20 +1,22 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export function UpdateTransactionModal({ isOpen, onConfirm, onCancel }) {
+export function DeleteUserModal({ isOpen, onConfirm, onCancel }) {
     const modalRef = useRef();
 
+    // Close on ESC key
     useEffect(() => {
         const handleEsc = (e) => {
-            if (e.key === "Escape") onCancel?.();
+            if (e.key === "Escape") onCancel();
         };
         document.addEventListener("keydown", handleEsc);
         return () => document.removeEventListener("keydown", handleEsc);
     }, [onCancel]);
 
+    // Close when clicking outside modal
     const handleBackdropClick = (e) => {
         if (modalRef.current && !modalRef.current.contains(e.target)) {
-            onCancel?.();
+            onCancel();
         }
     };
 
@@ -35,26 +37,25 @@ export function UpdateTransactionModal({ isOpen, onConfirm, onCancel }) {
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0.9, opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        onClick={(e) => e.stopPropagation()}
                     >
                         <h2 className="text-lg font-semibold text-gray-800 mb-4">
-                            Confirm Update
+                            Confirm Delete User
                         </h2>
                         <p className="text-gray-600 mb-6">
-                            Are you sure you want to update this transaction?
+                            Are you sure you want to delete this user? This action cannot be undone.
                         </p>
                         <div className="flex justify-end space-x-3">
                             <button
-                                onClick={() => onCancel?.()}
+                                onClick={onCancel}
                                 className="px-4 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100"
                             >
                                 Cancel
                             </button>
                             <button
-                                onClick={() => onConfirm?.()}
-                                className="px-4 py-2 rounded-md text-sm font-semibold text-white bg-[#F55345] hover:bg-red-600"
+                                onClick={onConfirm}
+                                className="px-4 py-2 rounded-md text-sm font-semibold text-white bg-red-500 hover:bg-red-600"
                             >
-                                Yes, Update
+                                Yes, Delete
                             </button>
                         </div>
                     </motion.div>

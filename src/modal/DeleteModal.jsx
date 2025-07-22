@@ -1,17 +1,34 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export function DeleteTransactionModal({ isOpen, onConfirm, onCancel }) {
+export function DeleteModal({ isOpen, onConfirm, onCancel }) {
+    const modalRef = useRef();
+
+    // ESC key to close
+    useEffect(() => {
+        const handleEsc = (e) => {
+            if (e.key === "Escape") onCancel?.();
+        };
+        document.addEventListener("keydown", handleEsc);
+        return () => document.removeEventListener("keydown", handleEsc);
+    }, [onCancel]);
+
     return (
         <AnimatePresence>
             {isOpen && (
                 <motion.div
-                    className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center"
+                    className="fixed inset-0 z-50 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
+                    onClick={(e) => {
+                        if (modalRef.current && !modalRef.current.contains(e.target)) {
+                            onCancel?.();
+                        }
+                    }}
                 >
                     <motion.div
+                        ref={modalRef}
                         className="bg-white rounded-xl p-6 shadow-xl w-[90%] max-w-sm"
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}

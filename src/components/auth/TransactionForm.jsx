@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { useAddTransaction, useUpdateTransaction, useDeleteTransaction } from "../../hooks/useTransactionUser";
 import { toast } from "react-toastify";
 import { UpdateTransactionModal } from "../../modal/UpdateTransactionModal.jsx";
-import { DeleteTransactionModal } from "../../modal/DeleteModal.jsx";
+import { DeleteModal } from "../../modal/DeleteModal.jsx";
 
 export default function TransactionForm({ onClose, onSuccess, initialData }) {
     const { mutate: addTransaction, isPending: isAdding } = useAddTransaction();
@@ -277,16 +277,28 @@ export default function TransactionForm({ onClose, onSuccess, initialData }) {
                     {isAdding ? "Adding..." : "Add Transaction"}
                 </button>
             )}
-            <UpdateTransactionModal
-                isOpen={showConfirmModal}
-                onConfirm={confirmUpdate}
-                onCancel={() => setShowConfirmModal(false)}
-            />
-            <DeleteTransactionModal
-                isOpen={showDeleteModal}
-                onConfirm={confirmDelete}
-                onCancel={() => setShowDeleteModal(false)}
-            />
+            {showConfirmModal && (
+                <UpdateTransactionModal
+                    isOpen={showConfirmModal}
+                    onConfirm={confirmUpdate}
+                    onCancel={() => {
+                        setPendingValues(null);
+                        setShowConfirmModal(false);
+                    }}
+                />
+            )}
+
+            {showDeleteModal && (
+                <DeleteModal
+                    isOpen={showDeleteModal}
+                    onConfirm={confirmDelete}
+                    onCancel={() => {
+                        setPendingValues(null)
+                        setShowDeleteModal(false);
+                    }}
+                />
+            )}
+
         </form>
     );
 }
