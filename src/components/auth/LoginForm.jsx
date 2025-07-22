@@ -7,6 +7,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from 'react-router-dom';
 import ForgotPasswordModal from "../../modal/ForgotPasswordModal.jsx";
+import { auth, googleProvider, facebookProvider } from "../../firebase";
+import {signInWithPopup} from "firebase/auth";
+import {toast} from "react-toastify";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -52,12 +55,39 @@ export default function LoginForm() {
     }
   )
 
-  const handleGoogleSignIn = () => {
-    console.log("Google sign in clicked");
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      // Save user info (optional)
+      localStorage.setItem("username", user.displayName);
+      localStorage.setItem("email", user.email);
+      localStorage.setItem("provider", "google");
+
+      toast.success(`Welcome, ${user.displayName || "User"}!`);
+      navigate("/dashboard", { replace: true });
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+      toast.error("Google Sign-In failed. Please try again.");
+    }
   };
 
-  const handleFacebookSignIn = () => {
-    console.log("Facebook sign in clicked");
+  const handleFacebookSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, facebookProvider);
+      const user = result.user;
+
+      localStorage.setItem("username", user.displayName);
+      localStorage.setItem("email", user.email);
+      localStorage.setItem("provider", "facebook");
+
+      toast.success(`Welcome, ${user.displayName || "User"}!`);
+      navigate("/dashboard", { replace: true });
+    } catch (error) {
+      console.error("Facebook Sign-In Error:", error);
+      toast.error("Facebook Sign-In failed. Please try again.");
+    }
   };
 
   return (
