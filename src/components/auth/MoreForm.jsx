@@ -10,6 +10,7 @@ import moreBgImage from "../../assets/images/more-bg.png";
 import FeedbackModal from "../../modal/FeedbackModal";
 import AccountInfoModal from "../../modal/AccountInfoModal";
 import { LogoutModal } from "../../modal/LogoutModal";
+import ChangePasswordModal from "../../modal/ChangePasswordModal.jsx";
 
 export default function MoreForm() {
     const navigate = useNavigate();
@@ -17,7 +18,8 @@ export default function MoreForm() {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
     const [isAccountInfoModalOpen, setIsAccountInfoModalOpen] = useState(false);
-    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false); // ✅ for logout confirmation
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+    const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
 
     useEffect(() => {
         const storedName = localStorage.getItem("username");
@@ -65,7 +67,7 @@ export default function MoreForm() {
                         transition={{ duration: 0.5, ease: "easeOut" }}
                         className="bg-white rounded-2xl shadow border p-6 md:p-8 space-y-6"
                     >
-                        {/* ✅ Account Info opens modal */}
+                        {/* Account Info opens modal */}
                         <button
                             onClick={() => setIsAccountInfoModalOpen(true)}
                             className="flex items-start gap-4 p-4 rounded-lg hover:bg-gray-50 transition border border-transparent hover:border-gray-200 w-full text-left"
@@ -90,6 +92,21 @@ export default function MoreForm() {
                                 <p className="text-sm text-gray-500">Share your thoughts with us</p>
                             </div>
                         </button>
+
+                        {/* Change Password modal */}
+                        <button
+                            onClick={() => setIsChangePasswordModalOpen(true)}
+                            className="flex items-start gap-4 p-4 rounded-lg hover:bg-gray-50 transition border border-transparent hover:border-gray-200 w-full text-left"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-yellow-500 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m0 4v.01M6.938 4.938a8 8 0 1110.124 0M8 9a4 4 0 108 0" />
+                            </svg>
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-800">Change Password</h3>
+                                <p className="text-sm text-gray-500">Update your account password</p>
+                            </div>
+                        </button>
+
 
                         {/* Logout opens modal */}
                         <button
@@ -119,6 +136,11 @@ export default function MoreForm() {
                     setUsername(newName || "User");
                     localStorage.setItem("username", newName || "User");
                 }}
+            />
+
+            <ChangePasswordModal
+                isOpen={isChangePasswordModalOpen}
+                onClose={() => setIsChangePasswordModalOpen(false)}
             />
 
             <LogoutModal
