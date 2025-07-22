@@ -1,8 +1,8 @@
 import { getAllSystemActivityApi, getOneSystemActivityApi } from "../../api/admin/systemActivityApi";
 
-export const getAllSystemActivityService = async (params) => {
+export const getAllSystemActivityService = async () => {
   try {
-    const response = await getAllSystemActivityApi(params);
+    const response = await getAllSystemActivityApi();
     return response.data;
   } catch (err) {
     console.log(err);

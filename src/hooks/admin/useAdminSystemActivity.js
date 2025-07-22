@@ -1,15 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAllSystemActivityService, getOneSystemActivityService } from "../../services/admin/systemActivityService";
 
-export const useAdminSystemActivity = (params = { page: 1, limit: 5 }) => {
-  const query = useQuery(
-    {
-      queryKey: ["admin_system_activity", params],
-      queryFn: () => getAllSystemActivityService(params),
-      keepPreviousData: true,
-    }
-  );
-  return { ...query };
+export const useAdminSystemActivity = () => {
+    return useQuery({
+        queryKey: ["admin_system_activity"],
+        queryFn: getAllSystemActivityService,
+        keepPreviousData: true,
+    });
 };
 
 export const useGetOneSystemActivity = (id) => {
