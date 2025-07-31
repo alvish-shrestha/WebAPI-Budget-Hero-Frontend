@@ -113,6 +113,8 @@ export default function GoalForm({ onClose, onSuccess, initialData }) {
             <div className="flex flex-col">
                 <label className="text-sm font-medium mb-1">Deadline</label>
                 <input
+                    id="deadline"
+                    name="deadline"
                     type="date"
                     {...formik.getFieldProps("deadline")}
                     className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#F55345] transition"

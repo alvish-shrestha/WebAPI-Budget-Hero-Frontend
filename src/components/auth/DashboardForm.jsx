@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import {
   Calendar,
@@ -145,6 +146,7 @@ export default function DashboardForm() {
 
             {streakData?.streak?.current > 0 && (
               <button
+                  aria-label="Streak"
                 onClick={() => setIsStreakModalOpen(true)}
                 data-tooltip-id="streak-tip"
                 data-tooltip-content={`🏆 Best: ${streakData.streak.best} days`}
@@ -223,8 +225,9 @@ export default function DashboardForm() {
             </h2>
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => setCurrentMonth((prev) => subMonths(prev, 1))}
-                className="text-gray-600 hover:text-gray-800 text-sm font-medium px-3 py-1 border rounded-lg"
+                  title="Previous Month"
+                  onClick={() => setCurrentMonth((prev) => subMonths(prev, 1))}
+                  className="text-gray-600 hover:text-gray-800 text-sm font-medium px-3 py-1 border rounded-lg"
               >
                 ← Prev
               </button>
@@ -232,6 +235,7 @@ export default function DashboardForm() {
                 {format(currentMonth, "MMMM yyyy")}
               </p>
               <button
+                  title="Next Month"
                 onClick={() => setCurrentMonth((prev) => addMonths(prev, 1))}
                 className="text-gray-600 hover:text-gray-800 text-sm font-medium px-3 py-1 border rounded-lg"
               >
@@ -310,6 +314,7 @@ export default function DashboardForm() {
         <button
           onClick={() => setIsModalOpen(true)}
           className="fixed bottom-8 right-8 w-16 h-16 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group"
+          aria-label="Add Transaction"
         >
           <Plus className="w-8 h-8 group-hover:scale-110 transition-transform duration-200" />
         </button>

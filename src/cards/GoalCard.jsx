@@ -76,12 +76,14 @@ export default function GoalCard({ goal, onEdit, onDelete, onContribute }) {
                 </div>
                 <div className="space-x-2">
                     <button
+                        title="Edit Goal"
                         onClick={() => onEdit(goal)}
                         className="text-sm text-blue-600 hover:underline"
                     >
                         Edit
                     </button>
                     <button
+                        title="Delete Goal"
                         onClick={() => onDelete(goal)}
                         className="text-sm text-red-500 hover:underline"
                     >
@@ -129,6 +131,7 @@ export default function GoalCard({ goal, onEdit, onDelete, onContribute }) {
 
                 {/* Contribute Button on the right */}
                 <button
+                    title="Contribute to Goal"
                     onClick={() => onContribute(goal)}
                     className="text-sm text-green-600 hover:underline font-medium whitespace-nowrap"
                 >

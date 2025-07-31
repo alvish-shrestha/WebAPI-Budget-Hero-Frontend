@@ -14,7 +14,7 @@ export default function RegisterForm() {
 
   const validationSchema = Yup.object(
     {
-      username: Yup.string().min(4, "Must be of at lease 4 characters").required("Username required"),
+      username: Yup.string().min(4, "Username must be at least 4 characters").required("Username required"),
       email: Yup.string().email("invalid email").required("Email required"),
       password: Yup.string().min(8, "Min 8 character required").required("Password required"),
       confirmPassword: Yup.string()

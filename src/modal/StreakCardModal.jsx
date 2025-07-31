@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import StreakCard from "../cards/StreakCard"; // adjust path if needed

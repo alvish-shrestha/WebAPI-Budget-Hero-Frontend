@@ -31,7 +31,7 @@ export function ConfirmDeleteModal({ isOpen, onConfirm, onCancel, title, message
                                 onClick={onConfirm}
                                 className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
                             >
-                                Delete
+                                Yes, Delete
                             </button>
                         </div>
                     </motion.div>
